@@ -5,13 +5,13 @@ const app = express();
 
 app.use(express.json())
 app.use(require("./Route/register"))
-//app.use(require("./Route/login"))
+app.use(require("./Route/login"))
 
 dotenv.config({ path: "./config.env" });
 
 const DB_URL = process.env.DATABASE_URL;
 
-console.log(DB_URL)
+// console.log(DB_URL)
 mongoose.set("strictQuery", false);
 mongoose.connect(DB_URL, {
     useNewURLParser: true,
