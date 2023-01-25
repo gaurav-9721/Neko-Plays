@@ -32,16 +32,35 @@ router.post('/login', async (req, res) => {
     }
 
     // JWT TOKEN
-    const jwttoken = await jwt.sign({'_Id': user._id}, process.env.SECRET_KEY)
+    const jwttoken = await jwt.sign({'_id': user._id}, process.env.SECRET_KEY)
     //console.log(token)
-    res.cookie("neko-plays", jwttoken, {
+    res.cookie("nekoplays", jwttoken, {
         httpOnly: true,
-        maxAge: 3600
+        maxAge: 3600000
     })
 
     console.log("Login successful")
     return res.status(200).json({"message": "Login Successful"})
     
+})
+
+router.get('/logout', async (req, res) => {
+    res.clearCookie('nekoplays')
+    return res.status(200).json({'message': 'Logout Successful'})
+})
+
+router.get('/userloggedin', async (req, res) => {
+    const jwtToken = req.cookies.nekoplays;
+    const verifyToken = jwt.verify(jwtToken, process.env.SECRET_KEY)
+
+    if (verifyToken){
+        return res.status(200).json({"login": "true"})
+        console.log('User Logged in')
+    }
+    else{
+        return res.status(404).json({"login": "false"})
+        console.log('User Logged out')
+    }
 })
 
 module.exports = router;

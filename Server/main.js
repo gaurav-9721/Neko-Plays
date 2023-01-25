@@ -4,15 +4,20 @@ const mongoose = require("mongoose")
 const app = express();
 
 app.use(express.json())
+
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 app.use(require("./Route/register"))
 app.use(require("./Route/login"))
+app.use(require("./Route/profile"))
+
 
 dotenv.config({ path: "./config.env" });
 
 const DB_URL = process.env.DATABASE_URL;
 
 // console.log(DB_URL)
-mongoose.set("strictQuery", false);
 mongoose.connect(DB_URL, {
     useNewURLParser: true,
     //useCreateIndex: true,
